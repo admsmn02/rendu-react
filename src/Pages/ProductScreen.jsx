@@ -4,6 +4,7 @@ import ProductCard from '../Components/ProductCard';
 import CartProvider from '../Contexts/CartProvider';
 import CartContext from '../Contexts/CartContext';
 import { useParams } from 'react-router-dom';
+import Header from '../Components/Header';
 
 export default function ProductScreen() {
  const { data, isLoading } = useGetProductsQuery();
@@ -20,6 +21,7 @@ export default function ProductScreen() {
 
  return (
     <CartProvider>
+      <Header />
       <div>
         <h1>Product numéro {productId}</h1>
         <div className="product-list">

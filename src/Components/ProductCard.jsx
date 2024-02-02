@@ -8,37 +8,40 @@ import styled from 'styled-components';
 const CardContainer = styled.div`
  display: flex;
  flex-direction: column;
- justify-content: center;
+ justify-content: space-between;
  align-items: center;
  border: 1px solid #ddd;
  margin: 10px;
  padding: 20px;
- max-width: 200px;
+ width: 350px;
+ height: 90%;
  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+ background-color: #fff;
 `;
-
 
 const Image = styled.img`
  width: 100%;
  height: auto;
  object-fit: cover;
+ border-radius: 5px;
 `;
 
 const Title = styled.h3`
- font-size: 1.5em;
+ font-size: 1.2em;
  margin-top: 15px;
  margin-bottom: 10px;
  font-weight: bold;
+ color: #333;
 `;
 
 const Description = styled.p`
- font-size: 1em;
+ font-size: 0.9em;
  margin-bottom: 15px;
  color: #666;
 `;
 
 const Price = styled.p`
- font-size: 1.2em;
+ font-size: 1.1em;
  font-weight: bold;
  color: #333;
  margin-bottom: 15px;
@@ -50,19 +53,21 @@ const Button = styled.button`
  border: none;
  padding: 10px 20px;
  cursor: pointer;
- transition: background-color 0.3s ease;
+ transition: background-color 0.3s ease, transform 0.3s ease;
  border-radius: 5px;
  margin-bottom: 10px;
+ width: 100%;
 
  &:hover {
     background-color: #0056b3;
+    transform: scale(1.05);
  }
 `;
 
 const FormInput = styled.input`
  margin-bottom: 10px;
  padding: 10px;
- width: 100%;
+ width: 93%;
  border: 1px solid #ccc;
  border-radius: 5px;
 `;
@@ -73,11 +78,13 @@ const FormButton = styled.button`
  border: none;
  padding: 10px 20px;
  cursor: pointer;
- transition: background-color 0.3s ease;
+ transition: background-color 0.3s ease, transform 0.3s ease;
  border-radius: 5px;
+ width: 100%;
 
  &:hover {
     background-color: #0056b3;
+    transform: scale(1.05);
  }
 `;
 
@@ -105,6 +112,7 @@ export default function ProductCard({ product }) {
       <Description>{product.description}</Description>
       <Price>Price: ${product.price}</Price>
       <Button onClick={handleAddToCart}>Add to Cart</Button>
+      <Link to={`/products/${product.id}/comments`}><img width="20" height="20" src="https://www.freeiconspng.com/thumbs/eye-icon/eyeball-icon-png-eye-icon-1.png" alt="" /></Link>
       <form onSubmit={handleSubmitComment}>
         <FormInput
           type="text"
