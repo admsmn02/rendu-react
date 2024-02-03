@@ -5,6 +5,7 @@ import ProductsScreen from './Pages/ProductsScreen';
 import ProductScreen from './Pages/ProductScreen';
 import CartScreen from './Pages/CartScreen';
 import NotFound from './Pages/NotFound';
+import NoProduct from './Pages/NoProduct';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { store } from './store';
@@ -15,6 +16,7 @@ const router = createBrowserRouter([
  {
     path: '/',
     element: <ProductsScreen />,
+    errorElement: <NotFound />
  },
  {
     path: '/products',
@@ -24,10 +26,12 @@ const router = createBrowserRouter([
  {
     path: '/products/:productId/comments',
     element: <ProductScreen />,
+    errorElement: <NoProduct/>
  }, 
  {
     path: '/cart',
     element: <CartScreen />,
+    errorElement: <NotFound />
  }
 ]);
 
