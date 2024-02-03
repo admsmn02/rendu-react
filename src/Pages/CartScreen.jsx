@@ -51,6 +51,12 @@ const CartItemPrice = styled.p`
  color: #777;
 `;
 
+const CartItemQuantity = styled.span`
+ font-size: 1rem;
+ color: #777;
+ margin-left: 0.5rem;
+`;
+
 const RemoveButton = styled.button`
  background: none;
  border: none;
@@ -74,14 +80,22 @@ const EmptyCartButton = styled.button`
  cursor: pointer;
  transition-duration: 0.4s;
  &:hover {
-   background-color: #da190b; /* Darker red */
-   color: white;
+    background-color: #da190b; /* Darker red */
+    color: white;
  }
 `;
 
 export default function CartPage() {
- const cartItems = localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')) : [];
+ const rawCartItems = localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')) : [];
  const { removeFromCart, emptyCart } = useContext(CartContext);
+
+ const groupedCartItems = rawCartItems.reduce((acc, item) => {
+    acc[item.id] = acc[item.id] || { ...item, quantity: 0 };
+    acc[item.id].quantity += 1;
+    return acc;
+ }, {});
+
+ const cartItems = Object.values(groupedCartItems);
 
  return (
     <>
@@ -99,11 +113,9 @@ export default function CartPage() {
               <CartItemImage src={item.image} alt={item.title} />
               <CartItemInfo>
                 <CartItemTitle>{item.title}</CartItemTitle>
-                <CartItemPrice>Price: ${item.price}</CartItemPrice>
+                <CartItemPrice>${(item.price * item.quantity).toFixed(2)}</CartItemPrice>                <CartItemQuantity>{`x${item.quantity}`}</CartItemQuantity>
               </CartItemInfo>
-              {cartItems.length > 0 && (
-                <RemoveButton onClick={() => removeFromCart(String(item.id))}>Remove Item</RemoveButton>
-              )}
+              <RemoveButton onClick={() => removeFromCart(String(item.id))}>Remove Item</RemoveButton>
             </CartItemContainer>
           ))
         )}
