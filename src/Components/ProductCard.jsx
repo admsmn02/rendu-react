@@ -4,6 +4,7 @@ import CartContext from '../Contexts/CartContext';
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { useLocation } from 'react-router-dom';
 
 const CardContainer = styled.div`
  display: flex;
@@ -89,45 +90,50 @@ const FormButton = styled.button`
 `;
 
 export default function ProductCard({ product }) {
- const { addToCart, cartItems } = useContext(CartContext);
- const [postComment] = usePostProductCommentMutation();
- const [newComment, setNewComment] = useState('');
- const [username, setUsername] = useState('');
-
- const handleAddToCart = () => {
-    addToCart(product);
- };
-
- const handleSubmitComment = async (e) => {
-    e.preventDefault();
-    await postComment({ productId: product.id, username, comment: newComment });
-    setNewComment('');
-    setUsername('');
- };
-
- return (
-    <CardContainer>
-      <Image src={product.image} alt={product.title} />
-      <Title>{product.title}</Title>
-      <Description>{product.description}</Description>
-      <Price>Price: ${product.price}</Price>
-      <Button onClick={handleAddToCart}>Add to Cart</Button>
-      <Link to={`/products/${product.id}/comments`}><img width="20" height="20" src="https://www.freeiconspng.com/thumbs/eye-icon/eyeball-icon-png-eye-icon-1.png" alt="" /></Link>
-      <form onSubmit={handleSubmitComment}>
-        <FormInput
-          type="text"
-          placeholder="Your username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <FormInput
-          type="text"
-          placeholder="Your comment"
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-        />
-        <FormButton type="submit">Submit Comment</FormButton>
-      </form>
-    </CardContainer>
- );
-}
+   const { addToCart } = useContext(CartContext);
+   const [postComment] = usePostProductCommentMutation();
+   const [newComment, setNewComment] = useState('');
+   const [username, setUsername] = useState('');
+  
+   const location = useLocation();
+   const showAddToCartButton = !location.pathname.includes('/comments');
+  
+   const handleAddToCart = () => {
+      addToCart(product);
+   };
+  
+   const handleSubmitComment = async (e) => {
+      e.preventDefault();
+      await postComment({ productId: product.id, username, comment: newComment });
+      setNewComment('');
+      setUsername('');
+   };
+  
+   return (
+      <CardContainer>
+        <Image src={product.image} alt={product.title} />
+        <Title>{product.title}</Title>
+        <Description>{product.description}</Description>
+        <Price>Price: ${product.price}</Price>
+        {showAddToCartButton && (
+          <Button onClick={handleAddToCart}>Add to Cart</Button>
+        )}
+        <Link to={`/products/${product.id}/comments`}><img width="20" height="20" src="https://www.freeiconspng.com/thumbs/eye-icon/eyeball-icon-png-eye-icon-1.png" alt="" /></Link>
+        <form onSubmit={handleSubmitComment}>
+          <FormInput
+            type="text"
+            placeholder="Your username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <FormInput
+            type="text"
+            placeholder="Your comment"
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+          />
+          <FormButton type="submit">Submit Comment</FormButton>
+        </form>
+      </CardContainer>
+   );
+  }

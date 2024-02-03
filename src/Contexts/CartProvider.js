@@ -10,10 +10,16 @@ const CartProvider = ({ children }) => {
   };
 
   const removeFromCart = (itemId) => {
-    const storedCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-    const updatedCartItems = storedCartItems.filter(item => item.id !== itemId);
-    setCartItems(updatedCartItems);
-    localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+    let storedCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    const itemIndex = storedCartItems.findIndex(item => item.id === itemId);
+   
+    if (itemIndex !== -1) {
+       // Remove the item from the array
+       storedCartItems.splice(itemIndex, 1);
+       // Update the state and local storage
+       setCartItems(storedCartItems);
+       localStorage.setItem('cartItems', JSON.stringify(storedCartItems));
+    }
    };
 
   const emptyCart = () => {
